@@ -1,76 +1,74 @@
-const database = require("./database");
+const fs = require("fs");
+const path = require("path");
+
+const ملف_الحسابات = path.join(__dirname, "accounts.json");
+
+
+function قراءة_الحسابات() {
+    if (!fs.existsSync(ملف_الحسابات)) {
+        fs.writeFileSync(ملف_الحسابات, "{}");
+    }
+
+    return JSON.parse(fs.readFileSync(ملف_الحسابات));
+}
+
+
+function حفظ_الحسابات(بيانات) {
+    fs.writeFileSync(
+        ملف_الحسابات,
+        JSON.stringify(بيانات, null, 4)
+    );
+}
+
+
+function إنشاء_حساب(id) {
+
+    let الحسابات = قراءة_الحسابات();
+
+    if (!الحسابات[id]) {
+
+        الحسابات[id] = {
+            الرصيد: 1000,
+            العملة: "دينار توبي",
+            تاريخ_الإنشاء: new Date()
+        };
+
+        حفظ_الحسابات(الحسابات);
+    }
+
+    return الحسابات[id];
+}
+
+
+function جلب_الحساب(id) {
+
+    let الحسابات = قراءة_الحسابات();
+
+    return الحسابات[id] || إنشاء_حساب(id);
+}
+
+
+function تحديث_الرصيد(id, المبلغ) {
+
+    let الحسابات = قراءة_الحسابات();
+
+    if (!الحسابات[id]) {
+        إنشاء_حساب(id);
+        الحسابات = قراءة_الحسابات();
+    }
+
+    الحسابات[id].الرصيد += المبلغ;
+
+    حفظ_الحسابات(الحسابات);
+
+    return الحسابات[id];
+}
+
 
 module.exports = {
-
-  create(userId) {
-
-    const account = {
-      id: userId,
-      money: 10000,
-      currency: "دينار توبي",
-      card: true
-    };
-
-    database.accounts.push(account);
-
-    return account;
-  },
-
-
-  get(userId) {
-
-    let account = database.accounts.find(
-      acc => acc.id === userId
-    );
-
-    if (!account) {
-      account = this.create(userId);
-    }
-
-    return account;
-  },
-
-
-  addMoney(userId, amount) {
-
-    const account = this.get(userId);
-
-    account.money += amount;
-
-    return account.money;
-  },
-
-
-  removeMoney(userId, amount) {
-
-    const account = this.get(userId);
-
-    if (account.money < amount) {
-      return false;
-    }
-
-    account.money -= amount;
-
-    return true;
-  },
-
-
-  transfer(from, to, amount) {
-
-    const sender = this.get(from);
-    const receiver = this.get(to);
-
-
-    if (sender.money < amount) {
-      return false;
-    }
-
-
-    sender.money -= amount;
-    receiver.money += amount;
-
-
-    return true;
-  }
-
+    قراءة_الحسابات,
+    حفظ_الحسابات,
+    إنشاء_حساب,
+    جلب_الحساب,
+    تحديث_الرصيد
 };
