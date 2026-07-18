@@ -1,53 +1,153 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { 
+    EmbedBuilder, 
+    ActionRowBuilder, 
+    ButtonBuilder, 
+    ButtonStyle 
+} = require("discord.js");
+
 
 module.exports = async (interaction) => {
 
-    const رسالة = new EmbedBuilder()
-        .setTitle("🏦 بنك دينار توبي")
+
+    const embed = new EmbedBuilder()
+
+        .setTitle("🏦 بنك دينار توبي المركزي")
+
         .setDescription(
-            `مرحباً بك في البنك المركزي 🏛️\n\n` +
-            `اختر الخدمة التي تريدها من الأزرار بالأسفل:\n\n` +
-            `💰 الحسابات\n` +
-            `💸 التحويلات\n` +
-            `📥 الإيداع\n` +
-            `📤 السحب\n` +
-            `💳 البطاقة البنكية`
+            `👋 أهلاً بك ${interaction.user}\n\n` +
+
+            "اختر الخدمة التي تريدها من القائمة:\n\n" +
+
+            "💳 الحساب البنكي\n" +
+            "💸 تحويل الأموال\n" +
+            "📥 إيداع\n" +
+            "📤 سحب\n" +
+            "💳 البطاقة البنكية\n" +
+            "📜 سجل العمليات\n" +
+            "⚙️ الإعدادات"
         )
+
         .setFooter({
-            text: "نظام بنك دينار توبي"
+            text: "عملة البنك: دينار توبي (TND)"
         });
 
 
-    const الأزرار = new ActionRowBuilder()
+
+    const الصف_الأول = new ActionRowBuilder()
+
         .addComponents(
 
             new ButtonBuilder()
+
                 .setCustomId("account")
-                .setLabel("💰 حسابي")
+
+                .setLabel("💳 حسابي")
+
                 .setStyle(ButtonStyle.Primary),
 
+
+
             new ButtonBuilder()
-                .setCustomId("transfer")
-                .setLabel("💸 تحويل")
+
+                .setCustomId("deposit")
+
+                .setLabel("📥 إيداع")
+
                 .setStyle(ButtonStyle.Success),
 
-            new ButtonBuilder()
-                .setCustomId("deposit")
-                .setLabel("📥 إيداع")
-                .setStyle(ButtonStyle.Secondary),
+
 
             new ButtonBuilder()
+
                 .setCustomId("withdraw")
+
                 .setLabel("📤 سحب")
-                .setStyle(ButtonStyle.Danger)
+
+                .setStyle(ButtonStyle.Danger),
+
+
+
+            new ButtonBuilder()
+
+                .setCustomId("transfer")
+
+                .setLabel("💸 تحويل")
+
+                .setStyle(ButtonStyle.Secondary),
+
+
+
+            new ButtonBuilder()
+
+                .setCustomId("card")
+
+                .setLabel("💳 البطاقة")
+
+                .setStyle(ButtonStyle.Primary)
 
         );
 
 
+
+    const الصف_الثاني = new ActionRowBuilder()
+
+        .addComponents(
+
+            new ButtonBuilder()
+
+                .setCustomId("history")
+
+                .setLabel("📜 السجل")
+
+                .setStyle(ButtonStyle.Secondary),
+
+
+
+            new ButtonBuilder()
+
+                .setCustomId("settings")
+
+                .setLabel("⚙️ الإعدادات")
+
+                .setStyle(ButtonStyle.Secondary),
+
+
+
+            new ButtonBuilder()
+
+                .setCustomId("ministry")
+
+                .setLabel("🏛️ الوزارات")
+
+                .setStyle(ButtonStyle.Success),
+
+
+
+            new ButtonBuilder()
+
+                .setCustomId("company")
+
+                .setLabel("🏢 الشركات")
+
+                .setStyle(ButtonStyle.Success)
+
+        );
+
+
+
+
     await interaction.reply({
-        embeds: [رسالة],
-        components: [الأزرار],
+
+        embeds: [embed],
+
+        components: [
+            الصف_الأول,
+            الصف_الثاني
+        ],
+
         ephemeral: true
+
     });
+
 
 };
