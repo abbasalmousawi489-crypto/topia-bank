@@ -1,7 +1,7 @@
 module.exports = {
-  customId: "account",
+  customId: "transfer",
 
   async execute(interaction) {
-    await interaction.reply("👤 تم فتح حسابك");
+    await interaction.reply("💸 نظام التحويل");
   }
 };
