@@ -1,10 +1,9 @@
 const companies = require("../database/companies");
 const accounts = require("../database/accounts");
 
-
 module.exports = {
-
   name: "advertise",
+  description: "نشر إعلان مدفوع",
 
   async execute(interaction) {
 
