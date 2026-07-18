@@ -1,18 +1,26 @@
-module.exports = {
-  name: "mainMenu",
+const { EmbedBuilder } = require("discord.js");
 
-  options: [
-    {
-      label: "🏦 البنك",
-      value: "bank"
-    },
-    {
-      label: "👤 الحساب",
-      value: "account"
-    },
-    {
-      label: "💸 تحويل",
-      value: "transfer"
-    }
-  ]
+module.exports = async (interaction) => {
+
+    const embed = new EmbedBuilder()
+        .setTitle("🏦 القائمة الرئيسية - بنك دينار توبي")
+        .setDescription(
+            "مرحباً بك في نظام البنك المركزي 🏛️\n\n" +
+            "اختر الخدمة المطلوبة:\n\n" +
+            "💰 الحساب البنكي\n" +
+            "💸 التحويلات المالية\n" +
+            "🏢 الشركات\n" +
+            "🏛️ الوزارات\n" +
+            "💳 البطاقة البنكية"
+        )
+        .setFooter({
+            text: "نظام بنك دينار توبي"
+        });
+
+
+    await interaction.reply({
+        embeds: [embed],
+        ephemeral: true
+    });
+
 };
