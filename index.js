@@ -1,23 +1,35 @@
 require("dotenv").config();
 
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
+const { 
+    Client, 
+    GatewayIntentBits, 
+    Collection 
+} = require("discord.js");
+
 const fs = require("fs");
 
 const client = new Client({
+
     intents: [
+
         GatewayIntentBits.Guilds,
+
         GatewayIntentBits.GuildMessages,
+
         GatewayIntentBits.MessageContent
+
     ]
+
 });
 
 
+// تخزين الأوامر
 client.commands = new Collection();
 
 
 // تحميل الأوامر
 const commandFiles = fs.readdirSync("./commands")
-    .filter(file => file.endsWith(".js"));
+.filter(file => file.endsWith(".js"));
 
 
 for (const file of commandFiles) {
@@ -32,23 +44,28 @@ for (const file of commandFiles) {
 }
 
 
-// ربط الأحداث
+// الأحداث
 const readyEvent = require("./events/ready");
 const interactionEvent = require("./events/interactionCreate");
+const messageEvent = require("./events/messageCreate");
 
 
+
+// تشغيل البوت
 client.once("ready", () => {
+
     readyEvent(client);
+
 });
 
 
+// الأزرار + القوائم + الأوامر
 client.on("interactionCreate", async (interaction) => {
 
-    // الأزرار والقوائم
+
     await interactionEvent(interaction);
 
 
-    // الأوامر
     if (!interaction.isChatInputCommand()) return;
 
 
@@ -62,7 +79,19 @@ client.on("interactionCreate", async (interaction) => {
 
     await command.execute(interaction);
 
+
 });
+
+
+// رسالة رصيدي
+client.on(
+    "messageCreate",
+    messageEvent
+);
+
+
+
+client.login(process.env.TOKEN);
 
 
 client.login(process.env.TOKEN);
