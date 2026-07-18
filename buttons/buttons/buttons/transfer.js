@@ -2,11 +2,12 @@ const { EmbedBuilder } = require("discord.js");
 
 module.exports = async (interaction) => {
 
+
     const embed = new EmbedBuilder()
         .setTitle("💸 تحويل الأموال")
         .setDescription(
-            "يمكنك تحويل دينار توبي إلى حسابات أخرى.\n\n" +
-            "🔹 نظام التحويل قيد الإعداد."
+            "🔹 نظام التحويل بين الحسابات\n\n" +
+            "سيتم إضافة التحويل الكامل لاحقاً."
         )
         .setFooter({
             text: "بنك دينار توبي"
@@ -17,5 +18,6 @@ module.exports = async (interaction) => {
         embeds: [embed],
         ephemeral: true
     });
+
 
 };
