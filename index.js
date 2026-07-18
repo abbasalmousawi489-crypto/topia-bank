@@ -1,12 +1,8 @@
 require("dotenv").config();
 
-const { 
-    Client, 
-    GatewayIntentBits, 
-    Collection 
-} = require("discord.js");
-
+const { Client, GatewayIntentBits, Collection } = require("discord.js");
 const fs = require("fs");
+
 
 const client = new Client({
 
@@ -23,75 +19,73 @@ const client = new Client({
 });
 
 
-// تخزين الأوامر
+// الأوامر
 client.commands = new Collection();
 
 
-// تحميل الأوامر
-const commandFiles = fs.readdirSync("./commands")
-.filter(file => file.endsWith(".js"));
+if (fs.existsSync("./commands")) {
+
+    const commandFiles = fs.readdirSync("./commands")
+        .filter(file => file.endsWith(".js"));
 
 
-for (const file of commandFiles) {
+    for (const file of commandFiles) {
 
-    const command = require(`./commands/${file}`);
+        const command = require(`./commands/${file}`);
 
-    client.commands.set(
-        command.name,
-        command
-    );
+        client.commands.set(
+            command.name,
+            command
+        );
+
+    }
 
 }
 
 
 // الأحداث
-const readyEvent = require("./events/ready");
 const interactionEvent = require("./events/interactionCreate");
 const messageEvent = require("./events/messageCreate");
 
 
-
-// تشغيل البوت
 client.once("ready", () => {
 
-    readyEvent(client);
+    console.log(`✅ ${client.user.tag} Online`);
 
 });
 
 
-// الأزرار + القوائم + الأوامر
+// الأزرار والقوائم
 client.on("interactionCreate", async (interaction) => {
 
+    try {
 
-    await interactionEvent(interaction);
+        await interactionEvent(interaction);
 
+    } catch (error) {
 
-    if (!interaction.isChatInputCommand()) return;
+        console.log(error);
 
-
-    const command = client.commands.get(
-        interaction.commandName
-    );
-
-
-    if (!command) return;
-
-
-    await command.execute(interaction);
-
+    }
 
 });
 
 
-// رسالة رصيدي
-client.on(
-    "messageCreate",
-    messageEvent
-);
+// الرسائل (رصيدي)
+client.on("messageCreate", async (message) => {
+
+    try {
+
+        await messageEvent(message);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
+});
 
 
-
-client.login(process.env.TOKEN);
-
-
+// تشغيل البوت
 client.login(process.env.TOKEN);
