@@ -1,7 +1,14 @@
 module.exports = (client) => {
-  console.log(`✅ تم تشغيل البنك: ${client.user.tag}`);
+    console.log(`✅ تم تشغيل بنك دينار توبي بنجاح`);
+    console.log(`🏦 البوت: ${client.user.tag}`);
 
-  client.user.setActivity("🏦 بنك دينار توبي", {
-    type: 0
-  });
+    client.user.setPresence({
+        activities: [
+            {
+                name: "🏦 بنك دينار توبي | الخدمات المصرفية",
+                type: 0
+            }
+        ],
+        status: "online"
+    });
 };
