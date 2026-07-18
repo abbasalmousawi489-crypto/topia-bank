@@ -1,7 +1,31 @@
-const data = {
-  accounts: [],
-  companies: [],
-  ministries: []
-};
+const الحسابات = require("./accounts");
 
-module.exports = data;
+module.exports = {
+
+    جلب_بيانات_المستخدم(id) {
+        return الحسابات.جلب_الحساب(id);
+    },
+
+
+    إنشاء_مستخدم(id) {
+        return الحسابات.إنشاء_حساب(id);
+    },
+
+
+    إضافة_رصيد(id, مبلغ) {
+        return الحسابات.تحديث_الرصيد(id, مبلغ);
+    },
+
+
+    خصم_رصيد(id, مبلغ) {
+
+        const حساب = الحسابات.جلب_الحساب(id);
+
+        if (حساب.الرصيد < مبلغ) {
+            return false;
+        }
+
+        return الحسابات.تحديث_الرصيد(id, -مبلغ);
+    }
+
+};
