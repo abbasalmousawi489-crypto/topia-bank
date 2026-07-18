@@ -1,5 +1,7 @@
 module.exports = (client) => {
-  console.log(`${client.user.tag} is online!`);
+  console.log(`✅ تم تشغيل البنك: ${client.user.tag}`);
 
-  client.user.setActivity("Valdora System");
+  client.user.setActivity("🏦 بنك دينار توبي", {
+    type: 0
+  });
 };
