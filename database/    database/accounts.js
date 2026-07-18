@@ -1,74 +1,123 @@
 const fs = require("fs");
 const path = require("path");
 
-const ملف_الحسابات = path.join(__dirname, "accounts.json");
+const file = path.join(__dirname, "accounts.json");
 
 
-function قراءة_الحسابات() {
-    if (!fs.existsSync(ملف_الحسابات)) {
-        fs.writeFileSync(ملف_الحسابات, "{}");
+function read() {
+
+    if (!fs.existsSync(file)) {
+        fs.writeFileSync(file, "{}");
     }
 
-    return JSON.parse(fs.readFileSync(ملف_الحسابات));
+    return JSON.parse(fs.readFileSync(file));
+
 }
 
 
-function حفظ_الحسابات(بيانات) {
+
+function save(data) {
+
     fs.writeFileSync(
-        ملف_الحسابات,
-        JSON.stringify(بيانات, null, 4)
+        file,
+        JSON.stringify(data, null, 4)
     );
+
 }
 
 
-function إنشاء_حساب(id) {
 
-    let الحسابات = قراءة_الحسابات();
+function createAccount(id) {
 
-    if (!الحسابات[id]) {
+    let accounts = read();
 
-        الحسابات[id] = {
+
+    if (!accounts[id]) {
+
+        accounts[id] = {
+
             الرصيد: 1000,
+
             العملة: "دينار توبي",
-            تاريخ_الإنشاء: new Date()
+
+            البطاقة: {
+
+                الرقم: Math.floor(100000000000 + Math.random() * 900000000000),
+
+                الحالة: "فعالة"
+
+            },
+
+            العمليات: []
+
         };
 
-        حفظ_الحسابات(الحسابات);
+
+        save(accounts);
+
     }
 
-    return الحسابات[id];
+
+    return accounts[id];
+
 }
 
 
-function جلب_الحساب(id) {
 
-    let الحسابات = قراءة_الحسابات();
+function getAccount(id) {
 
-    return الحسابات[id] || إنشاء_حساب(id);
+    let accounts = read();
+
+    return accounts[id] || createAccount(id);
+
 }
 
 
-function تحديث_الرصيد(id, المبلغ) {
 
-    let الحسابات = قراءة_الحسابات();
+function updateBalance(id, amount, نوع = "تعديل") {
 
-    if (!الحسابات[id]) {
-        إنشاء_حساب(id);
-        الحسابات = قراءة_الحسابات();
+
+    let accounts = read();
+
+
+    if (!accounts[id]) {
+
+        createAccount(id);
+
+        accounts = read();
+
     }
 
-    الحسابات[id].الرصيد += المبلغ;
 
-    حفظ_الحسابات(الحسابات);
+    accounts[id].الرصيد += amount;
 
-    return الحسابات[id];
+
+    accounts[id].العمليات.push({
+
+        النوع: نوع,
+
+        المبلغ: amount,
+
+        التاريخ: new Date().toLocaleString("ar")
+
+    });
+
+
+    save(accounts);
+
+
+    return accounts[id];
+
 }
+
 
 
 module.exports = {
-    قراءة_الحسابات,
-    حفظ_الحسابات,
-    إنشاء_حساب,
-    جلب_الحساب,
-    تحديث_الرصيد
+
+    createAccount,
+
+    getAccount,
+
+    updateBalance
+
 };
