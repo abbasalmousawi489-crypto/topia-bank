@@ -1,17 +1,19 @@
 const database = require("./database");
 
 module.exports = {
-  add(name, minister) {
-    const ministry = {
-      name: name,
-      minister: minister
-    };
 
-    database.ministries.push(ministry);
-    return ministry;
-  },
+  ministries: [
+    "وزارة المالية",
+    "وزارة الدفاع",
+    "وزارة الداخلية",
+    "وزارة الخارجية",
+    "وزارة الإعلام",
+    "وزارة العدل"
+  ],
+
 
   list() {
-    return database.ministries;
+    return this.ministries;
   }
+
 };
