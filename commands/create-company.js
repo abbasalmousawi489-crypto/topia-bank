@@ -3,7 +3,7 @@ const accounts = require("../database/accounts");
 
 module.exports = {
   name: "create-company",
-
+description: "إنشاء شركة جديدة",
   async execute(interaction) {
 
     const name = interaction.options.getString("name");
